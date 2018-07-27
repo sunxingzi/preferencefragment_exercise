@@ -55,8 +55,12 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
                 getResources().getBoolean(R.bool.pref_show_bass_default))
         // (3) Get the value of the show_bass checkbox preference and use it to call setShowBass
         mVisualizerView.setShowBass(showBase);
-        mVisualizerView.setShowMid(true);
-        mVisualizerView.setShowTreble(true);
+         //  Update the code in setupSharedPreferences and onSharedPreferenceChanged to update
+        mVisualizerView.setShowMid(sharedPreferences.getBoolean(getString(R.string.pref_show_mid_key),
+                getResources().getBoolean(R.bool.pref_show_mid_default)));
+        mVisualizerView.setShowTreble(sharedPreferences.getBoolean(getString(R.string.pref_show_treble_key),
+                getResources().getBoolean(R.bool.pref_show_treble_default)));
+				
         mVisualizerView.setMinSizeScale(1);
         mVisualizerView.setColor(getString(R.string.pref_color_red_value));
 		
@@ -67,9 +71,12 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
 	 @Override
     // (2) Override the onSharedPreferenceChanged method and update the show bass preference
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(getString(R.string.pref_show_bass_key))){
-            mVisualizerView.setShowBass(sharedPreferences.getBoolean(getString(R.string.pref_show_bass_key),
-                    getResources().getBoolean(R.bool.pref_show_bass_default)));
+        if (key.equals(getString(R.string.pref_show_bass_key))) {
+            mVisualizerView.setShowBass(sharedPreferences.getBoolean(key, getResources().getBoolean(R.bool.pref_show_bass_default)));
+        }else if(key.equals(getString(R.string.pref_show_mid_key))){
+            mVisualizerView.setShowMid(sharedPreferences.getBoolean(key,getResources().getBoolean(R.bool.pref_show_mid_default)));
+        }else if(key.equals(getString(R.string.pref_show_treble_key))){
+            mVisualizerView.setShowTreble(sharedPreferences.getBoolean(key,getResources().getBoolean(R.bool.pref_show_treble_default)));
         }
     }
 

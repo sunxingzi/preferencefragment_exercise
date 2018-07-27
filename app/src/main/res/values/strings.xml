@@ -11,6 +11,14 @@
     <string name="pref_show_bass_key" translatable="false">show_bass</string>
     <string name="pref_summary_off">Hidden</string>
     <string name="pref_summary_on">Shown</string>
+	
+	  <!-- Add all of the strings for the new checkboxes -->
+
+    <string name="pref_show_mid_label">Show Mid</string>
+    <string name="pref_show_treble_label">Show Treble</string>
+
+    <string name="pref_show_mid_key" translatable="false">show_mid</string>
+    <string name="pref_show_treble_key" translatable="false">show_treble</string>
 
 
     <!-- Value in SharedPreferences for red color option -->
