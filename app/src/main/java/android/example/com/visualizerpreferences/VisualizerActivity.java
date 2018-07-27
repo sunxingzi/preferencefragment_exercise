@@ -42,12 +42,17 @@ public class VisualizerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizer);
         mVisualizerView = (VisualizerView) findViewById(R.id.activity_visualizer);
-        defaultSetup();
+        setupSharedPreferences();
         setupPermissions();
     }
 
-    private void defaultSetup() {
-        mVisualizerView.setShowBass(true);
+    //  (1) Change the name of default setup to setupSharedPreferences
+    private void setupSharedPreferences() {
+        //  (2) Get a reference to the default shared preferences from the PreferenceManager class
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean showBase = sharedPreferences.getBoolean("show_base", true);
+        // (3) Get the value of the show_bass checkbox preference and use it to call setShowBass
+        mVisualizerView.setShowBass(showBase);
         mVisualizerView.setShowMid(true);
         mVisualizerView.setShowTreble(true);
         mVisualizerView.setMinSizeScale(1);
