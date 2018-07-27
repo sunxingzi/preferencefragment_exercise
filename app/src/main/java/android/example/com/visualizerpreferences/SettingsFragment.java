@@ -26,7 +26,9 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 
 //  Implement OnSharedPreferenceChangeListener
-public class SettingsFragment extends PreferenceFragmentCompat implements OnSharedPreferenceChangeListener{
+public class SettingsFragment extends PreferenceFragmentCompat
+ implements OnSharedPreferenceChangeListener,
+ Preference.OnPreferenceChangeListener{
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -48,6 +50,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnShar
                 setPreferenceSummary(p,value);
             }
         }
+		
+		Preference preference = findPreference(getString(R.string.pref_size_key));
+        preference.setOnPreferenceChangeListener(this);
     }
 
 
@@ -76,7 +81,39 @@ public class SettingsFragment extends PreferenceFragmentCompat implements OnShar
             if(indexOfValue >= 0){
                 listPreference.setSummary(listPreference.getEntries()[indexOfValue]);
             }
+        }else if (preference instanceof EditTextPreference) {
+            //  Don't forget to add code here to properly set the summary for an EditTextPreference
+            preference.setSummary(value);
         }
+    }
+	/*要将可接受的值限制在 0（不包括）和 3（包括）之间，
+	我们选择使用 PreferenceChangeListener - 它与 SharedPreferenceChangeListener 的不同之处为：
+		SharedPreferenceChangeListener 在任何值保存到 SharedPreferences 文件后被触发。
+		PreferenceChangeListener 在值保存到 SharedPreferences 文件前被触发。
+		因此，可以防止对偏好设置做出无效的更新。
+		PreferenceChangeListeners 也附加到了单个偏好设置上。*/
+	
+	 @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Toast error = Toast.makeText(getContext(), "Please select a number between 0.1 and 3", Toast.LENGTH_SHORT);
+        String sizeKey = getString(R.string.pref_size_key);
+        if(preference.getKey().equals(sizeKey)){
+            String stringSize = ((String) (newValue)).trim();
+            if(stringSize.equals("")){
+                stringSize = "1";
+            }
+            try{
+                float size = Float.parseFloat(stringSize);
+                if(size > 3 || size <= 0){
+                    error.show();
+                    return false;
+                }
+            }catch (NumberFormatException e){
+                error.show();
+                return false;
+            }
+        }
+        return true;
     }
 
     //  Register and unregister the OnSharedPreferenceChange listener (this class) in
